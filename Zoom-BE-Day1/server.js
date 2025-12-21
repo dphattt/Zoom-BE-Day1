@@ -1,5 +1,11 @@
 // server.mjs
 import { createServer } from "node:http";
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+const ALLOWED_ORIGIN = process.env.CLIENT_URL || "*";
 
 // Cục data
 let taskId = 1;
@@ -7,7 +13,10 @@ const db = {
   tasks: [],
 };
 const serverRes = (res, data) => {
-  res.writeHead(data.status, { "Content-Type": "application/json" });
+  res.writeHead(data.status, {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "http://localhost:5173/",
+  });
   res.end(JSON.stringify(data));
 };
 const server = createServer((req, res) => {
@@ -47,7 +56,7 @@ const server = createServer((req, res) => {
       const newTask = {
         id: taskId++,
         title: payload.title,
-        isComplete: false,
+        isCompleted: false,
       };
       db.tasks.push(newTask);
       response.status = 201;
@@ -73,7 +82,7 @@ const server = createServer((req, res) => {
         try {
           const payload = JSON.parse(body);
           task.title = payload.title;
-          task.isComplete = payload.isComplete;
+          task.isCompleted = payload.isCompleted;
           response.data = task;
           serverRes(res, response);
         } catch (error) {
@@ -112,5 +121,3 @@ const server = createServer((req, res) => {
 server.listen(3000, "127.0.0.1", () => {
   console.log("Listening on 127.0.0.1:3000");
 });
-
-// run with `node server.mjs`
