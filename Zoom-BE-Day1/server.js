@@ -1,10 +1,7 @@
 // server.mjs
 import { createServer } from "node:http";
 const port = process.env.PORT || 3000;
-
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+// Biến môi trường
 const ALLOWED_ORIGIN = process.env.CLIENT_URL || "*";
 
 // Cục data
@@ -15,7 +12,7 @@ const db = {
 const serverRes = (res, data) => {
   res.writeHead(data.status, {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "http://localhost:5173/",
+    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
   });
   res.end(JSON.stringify(data));
 };
@@ -117,7 +114,6 @@ const server = createServer((req, res) => {
   }
 });
 
-// starts a simple http server locally on port 3000
-server.listen(3000, "127.0.0.1", () => {
-  console.log("Listening on 127.0.0.1:3000");
+server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
