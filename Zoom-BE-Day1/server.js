@@ -21,6 +21,16 @@ const server = createServer((req, res) => {
     status: 200,
   };
 
+  if (req.method === "OPTIONS") {
+    res.writeHead(204, {
+      "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+      "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+    res.end();
+    return;
+  }
+
   // GET /api/tasks
   if (req.method === "GET" && req.url === "/api/tasks") {
     response.data = db.tasks;
